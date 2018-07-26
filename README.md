@@ -29,46 +29,29 @@ We can do manual testing as well by running the py file.
 http://localhost:8080/demo/api/customers
 
 Output:
-
 [
-   {
-      "id":1,
-      "name":"User 1",
-      "address":"Mysore, karnataka",
-      "status":"INACTIVE",
-      "viewId":1,
-      "workflowId":1,
-      "onboarded":false
-   },
-   {
-      "id":2,
-      "name":"User 2",
-      "address":"Bangalore, Karnataka",
-      "status":"ACTIVE",
-      "viewId":2,
-      "workflowId":2,
-      "onboarded":false
-   },
-   {
-      "id":3,
-      "name":"User 3",
-      "address":"Mumbai, Maharastra",
-      "status":"BLOCKED",
-      "viewId":3,
-      "workflowId":3,
-      "onboarded":true
-   },
-   {
-      "id":4,
-      "name":"User 4",
-      "address":"Chennai, Tamilnadu",
-      "status":"ACTIVE",
-      "viewId":4,
-      "workflowId":4,
-      "onboarded":false
-   }
+   {'id': 1,
+     'name':'User 1',
+      'address':'Bangalore, Karnataka',
+      'status':'INACTIVE',
+      'viewId':1,
+      'workflowId':1,
+      'onboarded':'true'},
+    {'id': 2,
+     'name':'User 2',
+      'address':'Chennai, ThamilNadu',
+      'status':'ACTIVE',
+      'viewId':1,
+      'workflowId':1,
+      'onboarded':'false'},
+    {'id': 3,
+     'name':'User 3',
+      'address':'Kolkata, West Bengal',
+      'status':'BLOCKED',
+      'viewId':1,
+      'workflowId':1,
+      'onboarded':'false'}
 ]
-
 
 
 
