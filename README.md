@@ -1,18 +1,16 @@
 #Assignment
 
 
-api-test
-It contains a demo of a Customer Onboard app for testing purpose. This demo uses springboot framework to build and mock a prototype of the Customer App for testing.
-
 The Customer Onboarding Application enable customization and a tenant who buys this application can customize the fields to be captured, the validations to be performed, number of views, sub Views, and the workflow for approval. The entire configuration is stored as json in Mongo. When a user logs in based on this configuration dynamic views are presented so that the Customers can be onboarded.
 
 
 Prerequisites
 
-Python 2.7.14, Postman for creating API mock server, 
+Python 2.7.14, Postman for creating API mock server, python idle or any tool which supports python plug in 
 
-package
-requests 
+package/tools:
+
+requests , flask , jsonify
 
 The integration test covers the two APIs
 
