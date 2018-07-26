@@ -6,7 +6,7 @@ The Customer Onboarding Application enable customization and a tenant who buys t
 
 Prerequisites
 
-Python 2.7.14, Postman for creating API mock server, python idle or any tool which supports python plug in 
+Python 2.7.14, python idle or any tool which supports python plug in 
 
 package/tools:
 
