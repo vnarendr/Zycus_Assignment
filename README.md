@@ -26,7 +26,12 @@ It will generate different test report (JSON, HTML etc) inside build folder as t
 Run Customer App
 We can do manual testing as well by running the py file.
 
-http://localhost:8080/demo/api/customers
+Customer on boarding Root directory 
+http://127.0.0.1:5000/
+
+will listout all the users in the customers table 
+http://127.0.0.1:5000/api/v1/resources/customers/all
+
 
 Output:
 [
@@ -52,6 +57,31 @@ Output:
       'workflowId':1,
       'onboarded':'false'}
 ]
+
+by using speicific id 
+
+http://127.0.0.1:5000/api/v1/resources/customers?id=1
+ json Response : output 
+[
+  {
+    "address": "Bangalore, Karnataka", 
+    "id": 1, 
+    "name": "User 1", 
+    "onboarded": "true", 
+    "status": "INACTIVE", 
+    "viewId": 1, 
+    "workflowId": 1
+  }
+]
+
+Error if ID not found in Customer table 
+
+http://127.0.0.1:5000/api/v1/resources/customers?id%20=%2010
+
+{
+  "Status": "Not Found", 
+  "code": 404
+}
 
 
 
