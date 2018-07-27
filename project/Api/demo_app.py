@@ -91,12 +91,7 @@ def api_create():
                  }
         print result 
         id =request.form['id']
-        #print type(result), result
-        #res = result.encode("ascii","replace")
-        #print type(result), result 
-                
-        #results.append(result)  
-        #self.resource.append(name.encode("utf-8"))
+       
         jsonify(customers.append(result))
         #print request.form['id']
         return(id)
