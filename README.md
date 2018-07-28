@@ -8,9 +8,9 @@ Prerequisites
 
 Python 2.7.14, python idle or any tool which supports python plug in 
 
-package/tools:
+package/tools used:
 
-requests , flask , jsonify
+requests , flask , jsonify, Eclipse Neon, pydev, Coverage, Unittest 
 
 The integration test covers the two APIs
 
