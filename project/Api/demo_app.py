@@ -1,13 +1,13 @@
-import flask
-from flask import request, jsonify 
+from flask import Flask 
+from flask import request, jsonify , render_template, url_for
+import simplejson
 
-app = flask.Flask(__name__)
+app = Flask(__name__)
 app.config["DEBUG"] = True
 
-
+#html = '''<h3>Customer on Boarding Application  </h3>''' 
 # Create some test data for our catalog in the form of a list of dictionaries.
-customers = [
-   {'id': 1,
+customers = [  {'id': 1,
      'name':'User 1',
       'address':'Bangalore, Karnataka',
       'status':'INACTIVE',
@@ -28,37 +28,43 @@ customers = [
       'viewId':1,
       'workflowId':1,
       'onboarded':'false'}
-]
+ ]
 
 @app.route('/', methods=['GET'])
 def home():
-    return '''<h1>Customer on Boarding </h1>
+    return '''<h2>Customer on Boarding </h2>
 <p>A prototype API for customers view .</p>
    ''' 
 # A route to return all of the available entries in our catalog.
 @app.route('/api/v1/resources/customers/all', methods=['GET'])
 def api_all():
     #status_code = 200
-    return jsonify(customers)
-    '''({
-             'Json' : customers,
-             
-             'Status' : 'OK',
-             'code': 200  
-             }) 
-    '''
+    if(customers == None or customers == 'null' or customers == []):
+        #"status code = 200"
+        return '''<h3>Customer on Boarding Application  </h3>
+        <p> No customers are exit, Please create the user .</p>
+       '''
+    else: 
+        return jsonify(customers)
+    
 @app.route('/api/v1/resources/customers', methods=['GET'])
 def api_id():
+    exit_id = []
     # Check if an ID was provided as part of the URL.
     # If ID is provided, assign it to a variable.
     # If no ID is provided, display an error in the browser.
+    
     if 'id' in request.args:
         id = int(request.args['id'])
-    else:
-        return jsonify({
-                'Status' : 'Not Found',
-                'code' : 404}) 
-
+        for i in range(len(customers)):
+            #exit_id.append(customers[i]['id'])
+            exit_id.append(customers[i]['id'])
+        print id , exit_id
+        if id not in exit_id: 
+            return ("status :", 404)
+        else:
+            return ("status :", 200)
+    '''
     # Create an empty list for our results
     results = []
     
@@ -71,16 +77,25 @@ def api_id():
     # Use the jsonify function from Flask to convert our list of
     # Python dictionaries to the JSON format.
     return jsonify(results)
-
-@app.route('/api/v1/resources/customers/',methods = ['POST', 'GET'])
+    '''
+@app.route('/api/v1/resources/customers/create',methods = ['POST', 'GET'])
 def api_create():
-    #return  '''<h1>Creating user screen </h1>'''
+    
+    exit_id = [] 
+    
     if request.method == 'POST':
-        
-        #r = request.args.get('name', '')
-        #print r 
-        result = request.form['id']
-        result = {
+        result = simplejson.loads(request.form['id'])
+        #print type(result), result 
+
+        for i in range(len(customers)):
+            #exit_id.append(customers[i]['id'])
+            exit_id.append(customers[i]['id'])
+        print "final" ,exit_id, result
+     
+        if result not in exit_id:
+            exit_id.append(result)
+            stri = simplejson.dumps(exit_id)
+            result = {
                     'id':int(request.form['id']),
                     'name': request.form['name'],
                     'address': request.form['address'],
@@ -89,12 +104,12 @@ def api_create():
                     'workflowId': int(request.form['workflowId']),
                     'onboarded': request.form['onboarded']
                  }
-        print result 
-        id =request.form['id']
-       
-        jsonify(customers.append(result))
-        #print request.form['id']
-        return(id)
-        #return render_template("result.html",result = result)
+            customers.append(result)
+            return ('Status:' , 201) 
+            #return 'Created = ', 201
+        else:
+            return ("status :", 403)
+         
+        #return <h3>Customer is Not created </p>
 
 app.run()

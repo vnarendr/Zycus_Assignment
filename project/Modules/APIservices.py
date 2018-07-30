@@ -22,8 +22,10 @@ class APIservices():
             'Cache-Control': "no-cache",
             }
         
-        post_url = 'http://localhost:5000/api/v1/resources/customers/'
+        post_url = 'http://localhost:5000/api/v1/resources/customers/create'
+        #self.url_create = 'http://localhost:5000/api/v1/resources/customers/create'
         response = requests.post(post_url, body, headers)
+        #print response.status_code
         return response
    
 ser = APIservices()
