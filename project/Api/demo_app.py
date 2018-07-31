@@ -2,8 +2,9 @@ from flask import Flask
 from flask import request, jsonify , render_template, url_for
 import simplejson
 
-app = Flask(__name__)
-app.config["DEBUG"] = True
+app = Flask(__name__) # Creates the Flask application object
+# Starts the debugger. Otherwise will see a generic message such as Bad Gateway in the browser when there is a problem with your code.
+app.config["DEBUG"] = True 
 
 #html = '''<h3>Customer on Boarding Application  </h3>''' 
 # Create some test data for our catalog in the form of a list of dictionaries.
@@ -57,13 +58,19 @@ def api_id():
     if 'id' in request.args:
         id = int(request.args['id'])
         for i in range(len(customers)):
-            #exit_id.append(customers[i]['id'])
             exit_id.append(customers[i]['id'])
-        print id , exit_id
+            #exit_id.append(customers[i]['id'])
+        #print id , exit_id
         if id not in exit_id: 
-            return ("status :", 404)
+            return (" Not - Found", 404)
         else:
-            return ("status :", 200)
+            # Create an empty list for our results
+            results = []
+            for custid in customers:
+                if custid['id'] == id:
+                    results.append(custid)
+        return jsonify(results)
+            #return ("status :", 200)
     '''
     # Create an empty list for our results
     results = []
@@ -105,7 +112,7 @@ def api_create():
                     'onboarded': request.form['onboarded']
                  }
             customers.append(result)
-            return ('Status:' , 201) 
+            return ('Status: ' , 201) 
             #return 'Created = ', 201
         else:
             return ("status :", 403)
