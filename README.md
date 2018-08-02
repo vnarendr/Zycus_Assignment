@@ -17,7 +17,7 @@ The integration test covers the two APIs
 /customers used to create a customer
 /customers/{id} used to get a customer record
 
-It covers all possible positive and negative scenarios with HTTP Status code validations.
+It covers all possible positive and negative scenarios with HTTP Status code validations (GET, POST, PUT, DELETE).
 
 It will generate different test report (JSON, HTML etc) inside build folder as target/ and target/reports
 
