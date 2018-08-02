@@ -6,6 +6,7 @@ Created on Jul 27, 2018
 import simplejson
 import unittest
 from APIservices import APIservices
+import pdb
 
 class Customer(unittest.TestCase):
     def __init__(self):
@@ -13,7 +14,6 @@ class Customer(unittest.TestCase):
         self.host = 'http://localhost:5000'
         self.allcustomer = 'http://localhost:5000/api/v1/resources/customers/all'
         self.id = '0'
-        
         self.url_id = 'http://localhost:5000/api/v1/resources/customers?id='
         self.url_create = 'http://localhost:5000/api/v1/resources/customers/create'
         self.id = 4
@@ -47,7 +47,8 @@ class Customer(unittest.TestCase):
         if(response.status_code == 200):
             return "Status: 200  --- OK" 
         else: 
-            return "Status: 404 -  'Not found'"
+            # excluded the condition 
+            return "Status: 404 -  'Not found'" # pragma: no cover
          
     
     def customer_create(self, name, id, workflowid, address, viewId, onboarded, status):
@@ -61,15 +62,68 @@ class Customer(unittest.TestCase):
             'workflowId': int(workflowid),
             'onboarded':onboarded
             }
-
-        result = self.ser.post_method(body)
+        result = self.ser.get_method(self.allcustomer)
         
-        if (result.status_code == 403):
-            return "Status: 403 -  'Forbidden'"
+        for id in result.json():
+            if id['id'] == body['id']:
+                result.status_code = 403
         else:
-            return "Sucessfully Created the User with Id = "+str(id )+" and Status Code = " +str(result.status_code)  
+            result = self.ser.post_method(body)
+        if (result.status_code == 403):
+            # excluded the condition 
+            return "Status: 403 -  'Forbidden/Not Created'"  # pragma: no cover
+        else:
+            # excluded the condition in code coverage report 
+            return "Sucessfully Created the User with Id = "+str(body['id'])+" and Status Code = " +str(result.status_code)     # pragma: no cover
     
-    
+    def customer_update(self, *args):
+        result = self.ser.get_method(self.allcustomer)
+        json = {
+                    'id' : int(args[0]),
+                    'name' : args[1],
+                    'workflowId': args[2],
+                    'address': args[3],
+                    'viewId': args[4],
+                    'onboarded':args[5],
+                    'status':args[6],
+                }
+        #jsonData = 
+        #print type(result)
+        for index in result.json():
+            jsonid = index.get('id', 'unkown')
+            if jsonid == args[0]:
+                #print "Id exist with Existing detail" ,index
+                index.update(json) # merging 2 json Disctionary
+                result = self.ser.put_method(index)
+                #print result.json() 
+                #print result
+                break;
+        else:
+            #print "will create New record" , json 
+            result = self.ser.post_method(json)
+        
+        if (result.status_code == 201):
+            # excluded the condition 
+            return "New record is inserted for the User with Id = "+str(args[0])+" and Status Code = " +str(result.status_code)
+        elif (result.status_code == 202):
+            # excluded the condition 
+            return "Record Accepted for the Id = "+str(args[0])+" and Status Code = " +str(result.status_code)
+        else:
+            # excluded the condition in code coverage report 
+            return "Sucessfully updated the details for the given UserId = "+str(args[0])+" and Status Code = " +str(result.status_code)     # pragma: no cover
+        
+    def customer_delete(self, id):
+        url = 'http://localhost:5000/api/v1/resources/customers?id='+str(id)
+        id_ = self.ser.get_method(url)
+        if (id_.status_code  == 404):
+            return str(id_.status_code), id_.content     # pragma: no cover
+        else:
+            result = self.ser.delete_method(id)
+            return "record is sucessfully removed for the Id = "+str(id)+" and Status Code = " +str(result.status_code)
+       
+            
+        
+            
 if __name__ == '__main__':
     #unittest.main() 
     cus = Customer()
@@ -78,9 +132,14 @@ if __name__ == '__main__':
 #--- List out all the customer --------
     cus.customer_all(cus.allcustomer)
 #--- customer based on given id --------
-#print cus.customer_id(1)
+    cus.customer_id(1)
 #--- creating New customer --------
     cus.customer_create(cus.name, cus.id, cus.workflowid, cus.address,cus.viewId, cus.onboarded, cus.status) # -- will sucessfully create the user '4' 
-#------ verify the created user with id 4 
-    cus.customer_id(id = 4)
+    #------ verify the created user with id 4 
+    #cus.customer_id(id = 4)
+    cus.customer_update(cus.id, 'Himesh', cus.workflowid, cus.address, cus.viewId, cus.onboarded, cus.status)
+    
+    cus.customer_delete(cus.id)
+    
+    #cus.dict()
 

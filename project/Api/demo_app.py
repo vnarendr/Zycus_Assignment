@@ -1,6 +1,7 @@
 from flask import Flask 
 from flask import request, jsonify , render_template, url_for
 import simplejson
+import pdb
 
 app = Flask(__name__) # Creates the Flask application object
 # Starts the debugger. Otherwise will see a generic message such as Bad Gateway in the browser when there is a problem with your code.
@@ -28,8 +29,7 @@ customers = [  {'id': 1,
       'status':'BLOCKED',
       'viewId':1,
       'workflowId':1,
-      'onboarded':'false'}
- ]
+      'onboarded':'false'} ]
 
 @app.route('/', methods=['GET'])
 def home():
@@ -66,28 +66,16 @@ def api_id():
         else:
             # Create an empty list for our results
             results = []
+            # Loop through the data and match results that fit the requested ID.
             for custid in customers:
                 if custid['id'] == id:
                     results.append(custid)
+        # Python dictionaries to the JSON format.
         return jsonify(results)
             #return ("status :", 200)
-    '''
-    # Create an empty list for our results
-    results = []
-    
-    # Loop through the data and match results that fit the requested ID.
-    # IDs are unique, but other fields might return many results
-    for custid in customers:
-        if custid['id'] == id:
-            results.append(custid)
-
-    # Use the jsonify function from Flask to convert our list of
-    # Python dictionaries to the JSON format.
-    return jsonify(results)
-    '''
+            
 @app.route('/api/v1/resources/customers/create',methods = ['POST', 'GET'])
 def api_create():
-    
     exit_id = [] 
     
     if request.method == 'POST':
@@ -97,11 +85,11 @@ def api_create():
         for i in range(len(customers)):
             #exit_id.append(customers[i]['id'])
             exit_id.append(customers[i]['id'])
-        print "final" ,exit_id, result
+        #print "final" ,exit_id, result
      
         if result not in exit_id:
             exit_id.append(result)
-            stri = simplejson.dumps(exit_id)
+            #stri = simplejson.dumps(exit_id)
             result = {
                     'id':int(request.form['id']),
                     'name': request.form['name'],
@@ -113,10 +101,42 @@ def api_create():
                  }
             customers.append(result)
             return ('Status: ' , 201) 
-            #return 'Created = ', 201
         else:
             return ("status :", 403)
-         
-        #return <h3>Customer is Not created </p>
 
+@app.route('/api/v1/resources/customers/update',methods = ['PUT' , 'POST'])
+def api_put():
+    result = request.form
+    
+    resultstr = simplejson.dumps(result)
+    resultjson = simplejson.loads(resultstr)
+    #print (customers), type(customers)
+    
+    for index in customers:
+        find = index.get('id', "Not found")
+        if(find == int(resultjson['id'])):
+            customers.remove(index)
+               
+    result = {
+            'id':int(request.form['id']),
+            'name': request.form['name'],
+            'address': request.form['address'],
+            'status':request.form['status'],
+            'viewId': int(request.form['viewId']),
+            'workflowId': int(request.form['workflowId']),
+            'onboarded': request.form['onboarded']
+            }
+    customers.append(result)
+    return ('Status: ' , 202) 
+        
+@app.route('/api/v1/resources/customers',methods = ['DELETE'])
+def api_delete():
+    result = request.args['id']
+    
+    for custid in customers:
+        get_id = custid.get('id', "No found")
+        if (get_id == int(result)):
+            customers.remove(custid)
+    return (jsonify(customers))
+    
 app.run()

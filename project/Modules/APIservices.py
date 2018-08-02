@@ -5,6 +5,7 @@ Created on Jul 27, 2018
 '''
 
 import requests
+import pdb
 
 
 class APIservices():
@@ -25,7 +26,32 @@ class APIservices():
         post_url = 'http://localhost:5000/api/v1/resources/customers/create'
         #self.url_create = 'http://localhost:5000/api/v1/resources/customers/create'
         response = requests.post(post_url, body, headers)
-        #print response.status_code
         return response
+    
+    def put_method(self, body):
+        #pdb.set_trace()
+        put_url = 'http://localhost:5000/api/v1/resources/customers/update'
+        
+        response = requests.put(put_url, body)
+        #pdb.set_trace()
+    
+        
+        return response
+    
+    def delete_method(self, id):
+        #pdb.set_trace()
+        
+        url = 'http://localhost:5000/api/v1/resources/customers?id='+str(id)
+        response = requests.get(url, '')
+        #print response.status_code, url 
+        
+        if response.status_code == 200:
+            result = requests.delete(url)
+            #print result.status_code 
+            return result 
+        else:
+            print "Not Found -", response.status_code
+        #return response
+        
    
 ser = APIservices()
